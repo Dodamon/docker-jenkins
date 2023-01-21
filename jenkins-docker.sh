@@ -33,3 +33,8 @@ sudo apt-get install docker-compose -y
 
 sudo chmod 666 /var/run/docker.sock
 
+# nginx
+
+sudo apt update -y
+
+sudo apt install nginx -y
