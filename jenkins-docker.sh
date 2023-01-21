@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# install jenkins 
+
 sudo apt install openjdk-11-jdk -y
 
 curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo tee /usr/share/keyrings/jenkins-keyring.asc &gt; /dev/null
@@ -12,7 +14,7 @@ sudo apt update -y
 
 sudo apt install jenkins -y
 
-# docker 
+# install docker 
 sudo apt-get remove docker docker-engine docker.io containerd runc
 
 sudo apt-get update -y
@@ -37,7 +39,7 @@ sudo apt-get install docker-compose -y
 
 sudo chmod 666 /var/run/docker.sock
 
-# nginx
+# install nginx
 
 sudo apt update -y
 
