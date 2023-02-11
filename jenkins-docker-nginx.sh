@@ -38,3 +38,9 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io -y
 sudo apt-get install docker-compose -y
 
 sudo chmod 666 /var/run/docker.sock
+
+# install nginx
+
+sudo apt update -y
+
+sudo apt install nginx -y
