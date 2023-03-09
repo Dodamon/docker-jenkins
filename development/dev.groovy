@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('clone git lab repository') {
       steps {
-        git branch: 'release', credentialsId: 'gitlab', url: 'https://lab.ssafy.com/s08-bigdata-recom-sub2/S08P22A504.git'
+        git branch: 'dev', credentialsId: 'gitlab', url: 'https://lab.ssafy.com/s08-bigdata-recom-sub2/S08P22A504.git'
       }
     }
     stage('remove unused images') {
@@ -73,7 +73,7 @@ pipeline {
       steps {
         script {
           try {
-            sh 'curl -X POST -H "PRIVATE-TOKEN: 22HMryj9spaoUeCQ5sjM" -H "Content-Type: application/json" -d \'{"id": "287656", "source_branch": "release", "target_branch": "main", "title": "My merge request", "LABELS":"~DEPLOY"}\' https://lab.ssafy.com/api/v4/projects/287656/merge_requests'
+            sh 'curl -X POST -H "PRIVATE-TOKEN: 22HMryj9spaoUeCQ5sjM" -H "Content-Type: application/json" -d \'{"id": "287656", "source_branch": "dev", "target_branch": "release", "title": "My merge request"}\' https://lab.ssafy.com/api/v4/projects/287656/merge_requests'
           } catch (e) {
             echo "create merge request fail"
             mattermostSend(
@@ -84,11 +84,11 @@ pipeline {
         }
       }
     }
-    stage('release jenkins job finish') {
+    stage('dev jenkins job finish') {
       steps {
         mattermostSend(
           color: "good",
-          message: "[RELEASE JENKINS JOB SUCCESS]: ${env.JOB_NAME} | #${env.BUILD_NUMBER} | URL: ${env.BUILD_URL} link to build"
+          message: "[DEV JENKINS JOB SUCCESS]: ${env.JOB_NAME} | #${env.BUILD_NUMBER} | URL: ${env.BUILD_URL} link to build"
         )
       }
     }
