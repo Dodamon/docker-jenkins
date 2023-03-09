@@ -1,0 +1,29 @@
+version: "3"
+services:
+    client:
+        image: nowgnas/osakak:client
+        container_name: staging-client
+        ports:
+            - 3002:3002
+        environment:
+            REACT_APP_SERVER_BASE_URL: baseurl
+        networks:
+            - osakak
+    backend:
+        image: nowgnas/osakak:server
+        container_name: staging-server
+        ports:
+            - 8082:8082
+        environment:
+            USE_PROFILE: staging
+            HOST_NAME: a705osakak
+            SCHEMA: basetable
+            USERNAME: root
+            PASSWORD: dkrhfk705
+            JWT_SECRET: lskjflsakjflakdjflk
+        networks:
+            - osakak
+networks:
+    osakak:
+        external:
+            name: osakak

@@ -6,17 +6,6 @@ pipeline {
         git branch: 'dev', credentialsId: 'gitlab', url: 'https://lab.ssafy.com/s08-bigdata-recom-sub2/S08P22A504.git'
       }
     }
-    stage('remove unused images') {
-      steps {
-        script {
-          try {
-            sh 'docker images -qf dangling=true | xargs -I{} docker rmi {}'
-        } catch (e) {
-            echo 'no unused images'
-          }
-        }
-      }
-    }
     stage('client, server parallel build') {
       parallel {
         stage('client build') {
@@ -24,6 +13,7 @@ pipeline {
             script {
               try {
                 echo 'build client'
+                sh 'docker build -f client/Dockerfile -t nowgnas/osakak:client .'
               } catch (e) {
                 echo 'client build fail'
                 mattermostSend(
@@ -40,6 +30,7 @@ pipeline {
             script {
               try {
                 echo 'build server'
+                sh 'docker build -f client/Dockerfile -t nowgnas/osakak:server .'
               } catch (e) {
                 echo 'server build fail'
                 mattermostSend(
@@ -55,6 +46,20 @@ pipeline {
     stage('push build images') {
       steps {
         echo 'build image'
+        sh 'docker login -u nowgnas -p dltkddnjs!!'
+        sh 'docker push nowgnas/osakak:server'
+        sh 'docker push nowgnas/osakak:client '
+      }
+    }
+    stage('stop dev server') {
+      steps {
+        script {
+          try {
+            sh 'docker rm -f dev-client dev-server'
+          } catch(e) {
+            echo 'no running development server'
+          }
+        }
       }
     }
     stage('run dev server') {
@@ -62,9 +67,14 @@ pipeline {
         script {
           try {
             echo 'start dev server'
-            
+            sh 'docker login -u nowgnas -p dltkddnjs!!'
+            sh 'cd /home/ubuntu/development && docker-compose up -d'
           } catch (e) {
             echo 'development server run fail'
+            mattermostSend(
+              color: "#DF2E38",
+              message: "[RUN DEV SERVER FAIL]: ${env.JOB_NAME} | #${env.BUILD_NUMBER} | URL: ${env.BUILD_URL} link to build"
+            )
           }
         }
       }
@@ -80,6 +90,17 @@ pipeline {
               color: "#DF2E38",
               message: "[CREATE MERGE REQUEST FAIL]: ${env.JOB_NAME} | #${env.BUILD_NUMBER} | URL: ${env.BUILD_URL} link to build"
             )
+          }
+        }
+      }
+    }
+    stage('remove unused images') {
+      steps {
+        script {
+          try {
+            sh 'docker images -qf dangling=true | xargs -I{} docker rmi {}'
+        } catch (e) {
+            echo 'no unused images'
           }
         }
       }

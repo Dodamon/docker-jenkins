@@ -6,65 +6,30 @@ pipeline {
         git branch: 'release', credentialsId: 'gitlab', url: 'https://lab.ssafy.com/s08-bigdata-recom-sub2/S08P22A504.git'
       }
     }
-    stage('remove unused images') {
+    stage('stop staging server') {
       steps {
         script {
           try {
-            sh 'docker images -qf dangling=true | xargs -I{} docker rmi {}'
-        } catch (e) {
-            echo 'no unused images'
+            sh 'docker rm -f staging-client staging-server'
+          } catch(e) {
+            echo 'no running staging server'
           }
         }
       }
     }
-    stage('client, server parallel build') {
-      parallel {
-        stage('client build') {
-          steps {
-            script {
-              try {
-                echo 'build client'
-              } catch (e) {
-                echo 'client build fail'
-                mattermostSend(
-                  color: "#DF2E38",
-                  message: "[CLIENT BUILD FAIL]: ${env.JOB_NAME} | #${env.BUILD_NUMBER} | URL: ${env.BUILD_URL} link to build"
-                )
-              }
-            }
-            
-          }
-        }
-        stage('server build') {
-          steps {
-            script {
-              try {
-                echo 'build server'
-              } catch (e) {
-                echo 'server build fail'
-                mattermostSend(
-                  color: "#DF2E38",
-                  message: "[SERVER BUILD FAIL]: ${env.JOB_NAME} | #${env.BUILD_NUMBER} | URL: ${env.BUILD_URL} link to build"
-                )
-              }
-            }
-          }
-        }
-      }
-    }
-    stage('push build images') {
-      steps {
-        echo 'build image'
-      }
-    }
-    stage('run dev server') {
+    stage('run staging server') {
       steps {
         script {
           try {
-            echo 'start dev server'
-            
+            echo 'start staging server'
+            sh 'docker login -u nowgnas -p dltkddnjs!!'
+            sh 'cd /home/ubuntu/staging && docker-compose up -d'
           } catch (e) {
-            echo 'development server run fail'
+            echo 'staging server run fail'
+            mattermostSend(
+              color: "#DF2E38",
+              message: "[RUN STAGING SERVER FAIL]: ${env.JOB_NAME} | #${env.BUILD_NUMBER} | URL: ${env.BUILD_URL} link to build"
+            )
           }
         }
       }
@@ -73,13 +38,24 @@ pipeline {
       steps {
         script {
           try {
-            sh 'curl -X POST -H "PRIVATE-TOKEN: 22HMryj9spaoUeCQ5sjM" -H "Content-Type: application/json" -d \'{"id": "287656", "source_branch": "release", "target_branch": "main", "title": "My merge request", "LABELS":"~DEPLOY"}\' https://lab.ssafy.com/api/v4/projects/287656/merge_requests'
+            sh 'curl -X POST -H "PRIVATE-TOKEN: 22HMryj9spaoUeCQ5sjM" -H "Content-Type: application/json" -d \'{"id": "287656", "source_branch": "release", "target_branch": "dev", "title": "My merge request"}\' https://lab.ssafy.com/api/v4/projects/287656/merge_requests'
           } catch (e) {
             echo "create merge request fail"
             mattermostSend(
               color: "#DF2E38",
               message: "[CREATE MERGE REQUEST FAIL]: ${env.JOB_NAME} | #${env.BUILD_NUMBER} | URL: ${env.BUILD_URL} link to build"
             )
+          }
+        }
+      }
+    }
+    stage('remove unused images') {
+      steps {
+        script {
+          try {
+            sh 'docker images -qf dangling=true | xargs -I{} docker rmi {}'
+        } catch (e) {
+            echo 'no unused images'
           }
         }
       }
