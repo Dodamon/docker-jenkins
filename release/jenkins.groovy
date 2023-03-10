@@ -38,7 +38,7 @@ pipeline {
       steps {
         script {
           try {
-            sh 'curl -X POST -H "PRIVATE-TOKEN: 22HMryj9spaoUeCQ5sjM" -H "Content-Type: application/json" -d \'{"id": "287656", "source_branch": "release", "target_branch": "dev", "title": "My merge request"}\' https://lab.ssafy.com/api/v4/projects/287656/merge_requests'
+            sh 'curl -X POST -H "PRIVATE-TOKEN: 22HMryj9spaoUeCQ5sjM" -H "Content-Type: application/json" -d \'{"id": "287656", "source_branch": "release", "target_branch": "main", "title": ":twisted_rightwards_arrows: create merge request release into main"}\' https://lab.ssafy.com/api/v4/projects/287656/merge_requests'
           } catch (e) {
             echo "create merge request fail"
             mattermostSend(
