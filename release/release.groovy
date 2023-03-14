@@ -47,7 +47,7 @@ pipeline {
       steps {
         script {
           try {
-            sh 'docker rm -f staging-client staging-server'
+            sh 'docker rm -f stage-client stage-server'
           } catch(e) {
             echo 'no running staging server'
           }
