@@ -2,28 +2,28 @@ version: "3"
 services:
     client:
         image: nowgnas/osakak:client
-        container_name: staging-client
+        container_name: dev-client
         ports:
-            - 3002:3002
+            - 3001:3001
         environment:
-            REACT_APP_SERVER_BASE_URL: baseurl
+            REACT_APP_SERVER_DEV_BASE_URL: localhost:8081
         networks:
-            - osakak
+            - osakakdev
     backend:
         image: nowgnas/osakak:server
-        container_name: staging-server
+        container_name: dev-server
         ports:
-            - 8082:8082
+            - 8081:8081
         environment:
-            USE_PROFILE: staging
+            USE_PROFILE: dev
             HOST_NAME: a705osakak
             SCHEMA: basetable
             USERNAME: root
             PASSWORD: dkrhfk705
             JWT_SECRET: lskjflsakjflakdjflk
         networks:
-            - osakak
+            - osakakdev
 networks:
     osakak:
         external:
-            name: osakak
+            name: osakakdev

@@ -1,0 +1,27 @@
+version: "3"
+services:
+    client:
+        image: nowgnas/osakak:stage-client
+        container_name: stage-client
+        ports:
+            - 3002:3002
+        environment:
+            VITE_APP_BASEURL: http://34.125.110.36:8082/api
+        networks:
+            - osakakstage
+    backend:
+        image: nowgnas/osakak:stage-server
+        container_name: stage-server
+        ports:
+            - 8082:8082
+        environment:
+            USERNAME: devnowgnas
+            PASSWORD: dltkddnjs
+            PROJECT: osakak
+            NAME: osakakstageing
+        networks:
+            - osakakstage
+networks:
+    osakakstage:
+        external:
+            name: osakakstage

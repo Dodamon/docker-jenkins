@@ -1,0 +1,31 @@
+version: "3"
+services:
+    client:
+        build:
+            context: frontend/.
+            dockerfile: Dockerfile.dev
+            container_name: dev-client
+            ports:
+                - 3001:3001
+            environment:
+                VITE_APP_BASEURL: localhost:8081/api
+            networks:
+                - osakakdev
+    backend:
+        image: nowgnas/osakak:dev-server
+        container_name: dev-server
+        ports:
+            - 8081:8081
+        environment:
+            USE_PROFILE: dev
+            USERNAME: gcposakak
+            PASSWORD: wntkdskrdnjs
+            HOST: localhost
+            PORT: 27017
+            DATABASE: osakak
+        networks:
+            - osakakdev
+networks:
+    osakakdev:
+        external:
+            name: osakakdev
