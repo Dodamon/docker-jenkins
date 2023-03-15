@@ -6,13 +6,13 @@ pipeline {
         git branch: 'main', credentialsId: 'gitlab', url: 'https://lab.ssafy.com/s08-bigdata-recom-sub2/S08P22A504.git'
       }
     }
-    stage('stop staging server') {
+    stage('stop main server') {
       steps {
         script {
           try {
             sh 'docker rm -f client server'
           } catch(e) {
-            echo 'no running staging server'
+            echo 'no running main server'
           }
         }
       }
@@ -21,7 +21,7 @@ pipeline {
       steps {
         script {
           try {
-            echo 'start staging server'
+            echo 'start main server'
             sh 'docker login -u nowgnas -p dltkddnjs!!'
             sh 'cd /home/ubuntu/deploy && docker-compose up -d'
           } catch (e) {

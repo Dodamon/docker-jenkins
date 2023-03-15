@@ -6,7 +6,7 @@ services:
         ports:
             - 3000:3000
         environment:
-            REACT_APP_SERVER_BASE_URL: baseurl
+            VITE_APP_BASEURL: https://j8a504.p.ssafy.io/api
         networks:
             - osakak
     backend:
@@ -16,11 +16,11 @@ services:
             - 8083:8083
         environment:
             USE_PROFILE: prod
-            HOST_NAME: a705osakak
-            SCHEMA: basetable
-            USERNAME: root
-            PASSWORD: dkrhfk705
-            JWT_SECRET: lskjflsakjflakdjflk
+            USERNAME: osakak
+            PASSWORD: wntkdskrdnjs
+            HOST: localhost
+            PORT: 27017
+            DATABASE: osakak
         networks:
             - osakak
 networks:

@@ -60,7 +60,7 @@ pipeline {
           try {
             echo 'start staging server'
             sh 'docker login -u nowgnas -p dltkddnjs!!'
-            sh 'cd /home/ubuntu/staging && docker-compose up -d'
+            sh 'cd /home/ubuntu/staging && docker-compose -f compose-staging.yml up -d'
           } catch (e) {
             echo 'staging server run fail'
             mattermostSend(
