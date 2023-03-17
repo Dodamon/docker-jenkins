@@ -1,8 +1,8 @@
 version: "3"
 services:
     client:
-        image: nowgnas/osakak:stage-client
-        container_name: stage-client
+        image: nowgnas/osakak:stageclient
+        container_name: stageclient
         ports:
             - 3002:3002
         environment:
@@ -10,15 +10,16 @@ services:
         networks:
             - osakakstage
     backend:
-        image: nowgnas/osakak:stage-server
-        container_name: stage-server
+        image: nowgnas/osakak:stageserver
+        container_name: stageserver
         ports:
             - 8082:8082
         environment:
+            USE_PROFILE: staging
             USERNAME: devnowgnas
             PASSWORD: dltkddnjs
             PROJECT: osakak
-            NAME: osakakstageing
+            NAME: osakakstaging
         networks:
             - osakakstage
 networks:

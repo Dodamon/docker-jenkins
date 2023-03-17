@@ -4,7 +4,7 @@ services:
         build:
             context: frontend/.
             dockerfile: Dockerfile.dev
-            container_name: dev-client
+            container_name: devclient
             ports:
                 - 3001:3001
             environment:
@@ -12,17 +12,16 @@ services:
             networks:
                 - osakakdev
     backend:
-        image: nowgnas/osakak:dev-server
-        container_name: dev-server
+        image: nowgnas/osakak:devserver
+        container_name: devserver
         ports:
             - 8081:8081
         environment:
             USE_PROFILE: dev
-            USERNAME: gcposakak
-            PASSWORD: wntkdskrdnjs
-            HOST: localhost
-            PORT: 27017
-            DATABASE: osakak
+            USERNAME: devnowgnas
+            PASSWORD: dltkddnjs
+            PROJECT: osakak
+            NAME: osakakdev
         networks:
             - osakakdev
 networks:

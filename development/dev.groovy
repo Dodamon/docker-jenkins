@@ -13,7 +13,7 @@ pipeline {
             script {
               try {
                 echo 'build client'
-                sh 'docker build -f frontend/Dockerfile.dev -t nowgnas/osakak:dev-client .'
+                sh 'docker build -f frontend/Dockerfile.dev -t nowgnas/osakak:devclient .'
               } catch (e) {
                 echo 'client build fail'
                 mattermostSend(
@@ -30,7 +30,7 @@ pipeline {
             script {
               try {
                 echo 'build server'
-                sh 'docker build -f backend/Dockerfile.dev -t nowgnas/osakak:dev-server .'
+                sh 'docker build -f backend/Dockerfile.dev -t nowgnas/osakak:devserver .'
               } catch (e) {
                 echo 'server build fail'
                 mattermostSend(
@@ -47,15 +47,15 @@ pipeline {
       steps {
         echo 'build image'
         sh 'docker login -u nowgnas -p dltkddnjs!!'
-        sh 'docker push nowgnas/osakak:dev-server'
-        sh 'docker push nowgnas/osakak:dev-client'
+        sh 'docker push nowgnas/osakak:devserver'
+        sh 'docker push nowgnas/osakak:devclient'
       }
     }
     stage('stop dev server') {
       steps {
         script {
           try {
-            sh 'docker rm -f dev-client dev-server'
+            sh 'docker rm -f devclient devserver'
           } catch(e) {
             echo 'no running development server'
           }

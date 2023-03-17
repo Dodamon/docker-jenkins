@@ -13,7 +13,7 @@ pipeline {
             script {
               try {
                 echo 'build client'
-                sh 'docker build -f frontend/Dockerfile.staging -t nowgnas/osakak:stage-client .'
+                sh 'docker build -f frontend/Dockerfile.staging -t nowgnas/osakak:stageclient .'
               } catch (e) {
                 echo 'client build fail'
                 mattermostSend(
@@ -30,7 +30,7 @@ pipeline {
             script {
               try {
                 echo 'build server'
-                sh 'docker build -f backend/Dockerfile.staging -t nowgnas/osakak:stage-server .'
+                sh 'docker build -f backend/Dockerfile.staging -t nowgnas/osakak:stageserver .'
               } catch (e) {
                 echo 'server build fail'
                 mattermostSend(
@@ -47,7 +47,7 @@ pipeline {
       steps {
         script {
           try {
-            sh 'docker rm -f stage-client stage-server'
+            sh 'docker rm -f stageclient stageserver'
           } catch(e) {
             echo 'no running staging server'
           }
