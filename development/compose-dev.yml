@@ -1,16 +1,14 @@
 version: "3"
 services:
     client:
-        build:
-            context: frontend/.
-            dockerfile: Dockerfile.dev
-            container_name: devclient
-            ports:
-                - 3001:3001
-            environment:
-                VITE_APP_BASEURL: localhost:8081/api
-            networks:
-                - osakakdev
+        image: nowgnas/osakak:devclient
+        container_name: devclient
+        ports:
+            - 3001:3001
+        environment:
+            VITE_APP_BASEURL: localhost:8081/api
+        networks:
+            - osakakdev
     backend:
         image: nowgnas/osakak:devserver
         container_name: devserver
