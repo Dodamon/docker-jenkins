@@ -13,7 +13,7 @@ pipeline {
             script {
               try {
                 echo 'build client'
-                sh 'docker build -f frontend/Dockerfile.staging -t nowgnas/osakak:stageclient .'
+                sh 'docker build -f frontend/Dockerfile -t nowgnas/osakak:stageclient .'
               } catch (e) {
                 echo 'client build fail'
                 mattermostSend(
@@ -43,6 +43,14 @@ pipeline {
         }
       }
     }
+    stage('push build images') {
+      steps {
+        echo 'build image'
+        sh 'docker login -u nowgnas -p dltkddnjs!!'
+        sh 'docker push nowgnas/osakak:stageserver'
+        sh 'docker push nowgnas/osakak:stageclient'
+      }
+    }
     stage('stop staging server') {
       steps {
         script {
@@ -60,7 +68,7 @@ pipeline {
           try {
             echo 'start staging server'
             sh 'docker login -u nowgnas -p dltkddnjs!!'
-            sh 'cd /home/ubuntu/staging && docker-compose -f compose-staging.yml up -d'
+            sh 'cd /home/leo503801/staging && docker-compose -f compose-staging.yml up -d'
           } catch (e) {
             echo 'staging server run fail'
             mattermostSend(

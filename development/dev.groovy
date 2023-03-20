@@ -68,7 +68,7 @@ pipeline {
           try {
             echo 'start dev server'
             sh 'docker login -u nowgnas -p dltkddnjs!!'
-            sh 'cd /home/ubuntu/development && docker-compose -f compose-dev.yml up -d'
+            sh 'cd /home/leo503801/development && docker-compose -f compose-dev.yml up -d'
           } catch (e) {
             echo 'development server run fail'
             mattermostSend(

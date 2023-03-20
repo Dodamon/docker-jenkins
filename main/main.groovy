@@ -6,6 +6,51 @@ pipeline {
         git branch: 'main', credentialsId: 'gitlab', url: 'https://lab.ssafy.com/s08-bigdata-recom-sub2/S08P22A504.git'
       }
     }
+    stage('client, server parallel build') {
+      parallel {
+        stage('production client build') {
+          steps {
+            script {
+              try {
+                echo 'build client'
+                sh 'docker build -f frontend/Dockerfile -t nowgnas/osakak:client .'
+              } catch (e) {
+                echo 'client build fail'
+                mattermostSend(
+                  color: "#DF2E38",
+                  message: "[CLIENT BUILD FAIL]: ${env.JOB_NAME} | #${env.BUILD_NUMBER} | URL: ${env.BUILD_URL} link to build"
+                )
+              }
+            }
+            
+          }
+        }
+        stage('staging server build') {
+          steps {
+            script {
+              try {
+                echo 'build server'
+                sh 'docker build -f backend/Dockerfile.prod -t nowgnas/osakak:server .'
+              } catch (e) {
+                echo 'server build fail'
+                mattermostSend(
+                  color: "#DF2E38",
+                  message: "[SERVER BUILD FAIL]: ${env.JOB_NAME} | #${env.BUILD_NUMBER} | URL: ${env.BUILD_URL} link to build"
+                )
+              }
+            }
+          }
+        }
+      }
+    }
+    stage('push build images') {
+      steps {
+        echo 'build image'
+        sh 'docker login -u nowgnas -p dltkddnjs!!'
+        sh 'docker push nowgnas/osakak:server'
+        sh 'docker push nowgnas/osakak:client'
+      }
+    }
     stage('stop main server') {
       steps {
         script {

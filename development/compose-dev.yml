@@ -4,7 +4,7 @@ services:
         image: nowgnas/osakak:devclient
         container_name: devclient
         ports:
-            - 3001:3001
+            - 3001:5731
         environment:
             VITE_APP_BASEURL: localhost:8081/api
         networks:
